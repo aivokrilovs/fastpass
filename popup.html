@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastPass</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+
+      /* Light Theme */
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --border: #dadce0;
+      --text: #202124;
+      --text-secondary: #5f6368;
+      --text-muted: #80868b;
+
+      --accent: #fb542b; /* orange */
+      --accent-hover: #e0441d;
+      --accent-active: #c73714;
+      --accent-text: #ffffff;
+
+      --btn-bg: #f1f3f4;
+      --btn-hover: #e8eaed;
+      --btn-active: #dadce0;
+      --btn-border: #dadce0;
+      --btn-text: #3c4043;
+
+      --danger-bg: #fce8e6;
+      --danger-hover: #fad2cf;
+      --danger-border: #f5c2c7;
+      --danger-text: #c5221f;
+
+      --totp-bg: #e6f4ea;
+      --totp-border: #ceead6;
+      --totp-text: #137333;
+      --totp-badge: #ceead6;
+
+      --input-bg: #ffffff;
+      --input-border: #dadce0;
+      --input-text: #202124;
+      --input-focus: #fb542b;
+
+      --status-success-bg: #e6f4ea;
+      --status-success-text: #137333;
+      --status-success-border: #ceead6;
+
+      --status-error-bg: #fce8e6;
+      --status-error-text: #c5221f;
+      --status-error-border: #fad2cf;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Dark Theme */
+        --bg: #1e1e24;
+        --surface: #2b2b36;
+        --border: #3e3e4f;
+        --text: #f1f1f4;
+        --text-secondary: #9e9ea7;
+        --text-muted: #737380;
+
+        --accent: #fb542b; /* orange */
+        --accent-hover: #ff6e4a;
+        --accent-active: #e0441d;
+        --accent-text: #ffffff;
+
+        --btn-bg: #383846;
+        --btn-hover: #454556;
+        --btn-active: #4e4e61;
+        --btn-border: #4e4e61;
+        --btn-text: #f1f1f4;
+
+        --danger-bg: #3c1f24;
+        --danger-hover: #4d262c;
+        --danger-border: #5c2b30;
+        --danger-text: #f28b82;
+
+        --totp-bg: #172b1d;
+        --totp-border: #23492b;
+        --totp-text: #81c995;
+        --totp-badge: #23492b;
+
+        --input-bg: #1e1e24;
+        --input-border: #3e3e4f;
+        --input-text: #f1f1f4;
+        --input-focus: #fb542b;
+
+        --status-success-bg: #172b1d;
+        --status-success-text: #81c995;
+        --status-success-border: #23492b;
+
+        --status-error-bg: #3c1f24;
+        --status-error-text: #f28b82;
+        --status-error-border: #5c2b30;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      min-width: 320px;
+      height: 100%;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text);
+      background: var(--bg);
+      padding: 16px;
+      max-width: 460px;
+      margin: 0 auto;
+      overflow-y: auto;
+    }
+    h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .card-row:last-child {
+      margin-bottom: 0;
+    }
+    .label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+    .value {
+      font-family: monospace;
+      font-size: 12px;
+      word-break: break-all;
+      color: var(--text);
+    }
+    .totp-box {
+      background: var(--totp-bg);
+      border: 1px solid var(--totp-border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .totp-label {
+      font-weight: 600;
+      color: var(--totp-text);
+      font-size: 11px;
+    }
+    .totp-code {
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--totp-text);
+    }
+    .totp-timer {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--totp-text);
+      background: var(--totp-badge);
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    .btn {
+      font-size: 11px;
+      padding: 4px 8px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn:hover {
+      background: var(--btn-hover);
+    }
+    .btn:active {
+      background: var(--btn-active);
+    }
+    .btn-danger {
+      color: var(--danger-text);
+      border-color: var(--danger-border);
+      background: var(--danger-bg);
+    }
+    .btn-danger:hover {
+      background: var(--danger-hover);
+    }
+    .btn-confirm-delete {
+      background: var(--danger-text) !important;
+      color: #ffffff !important;
+      border-color: var(--danger-text) !important;
+      font-weight: 700;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent-hover);
+      font-weight: 600;
+      padding: 7px 12px;
+      width: 100%;
+      margin-top: 6px;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    .btn-primary:active {
+      background: var(--accent-active);
+    }
+    form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+    .form-group {
+      margin-bottom: 8px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 12px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--input-text);
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .form-group input:focus {
+      border-color: var(--input-focus);
+    }
+    .input-with-action {
+      display: flex;
+      gap: 4px;
+    }
+    .input-with-action input {
+      flex: 1;
+    }
+    #status-msg {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    .status-success {
+      background: var(--status-success-bg);
+      color: var(--status-success-text);
+      border: 1px solid var(--status-success-border);
+    }
+    .status-error {
+      background: var(--status-error-bg);
+      color: var(--status-error-text);
+      border: 1px solid var(--status-error-border);
+    }
+    .empty-state {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 6px 0;
+    }
+    #export-area {
+      width: 100%;
+      min-height: 90px;
+      padding: 6px 8px;
+      font-family: monospace;
+      font-size: 11px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--input-text);
+      border-radius: 4px;
+      outline: none;
+      resize: vertical;
+      scrollbar-width: none;
+    }
+    #export-area::-webkit-scrollbar {
+      display: none;
+    }
+    #export-area:focus {
+      border-color: var(--input-focus);
+    }
+    .backup-actions {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+      justify-content: center;
+      align-items: center;
+    }
+    #import-go-row {
+      text-align: right;
+      margin-top: 6px;
+    }
+    #import-go-btn {
+      all: revert;
+    }
+  </style>
+</head>
+<body>
+  <!-- ADD CREDENTIAL FORM -->
+  <section id="add-section">
+    <h2>Add Credential</h2>
+    <form id="add-form">
+      <div class="form-group">
+        <label for="domain-input">Domain</label>
+        <input type="text" id="domain-input" placeholder="example.com,example.co.uk" required autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="username-input">Username / Email</label>
+        <input type="text" id="username-input" placeholder="user@example.com" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="password-input">Password</label>
+        <div class="input-with-action">
+          <input type="password" id="password-input" placeholder="Password" autocomplete="off">
+          <button type="button" class="btn" id="toggle-form-pass-btn">Show</button>
+          <button type="button" class="btn" id="gen-pass-btn" title="Generate strong random password">Gen</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="totp-input">TOTP Secret</label>
+        <input type="text" id="totp-input" placeholder="e.g. JBSWY3DPEHPK3PXP" autocomplete="off">
+      </div>
+      <button type="submit" class="btn btn-primary">Save Credential</button>
+      <div id="status-msg"></div>
+    </form>
+  </section>
+
+  <!-- SAVED LOGINS -->
+  <section id="saved-section">
+    <h2 id="saved-title">Saved Passwords</h2>
+    <div id="credentials-list">
+      <div class="empty-state">Loading...</div>
+    </div>
+  </section>
+
+  <!-- BACKUP (EXPORT / IMPORT) -->
+  <section id="backup-section">
+    <div class="backup-actions">
+      <button type="button" class="btn" id="export-btn">Export</button>
+      <button type="button" class="btn" id="import-btn">Import</button>
+    </div>
+    <textarea id="export-area" hidden></textarea>
+    <div id="import-go-row" hidden>
+      <button type="button" id="import-go-btn">Import</button>
+    </div>
+  </section>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
