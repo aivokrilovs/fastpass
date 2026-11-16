@@ -8,7 +8,6 @@
     :root {
       color-scheme: light dark;
 
-      /* Light Theme */
       --bg: #f8f9fa;
       --surface: #ffffff;
       --border: #dadce0;
@@ -16,10 +15,9 @@
       --text-secondary: #5f6368;
       --text-muted: #80868b;
 
-      --accent: #fb542b; /* orange */
+      --accent: #fb542b;
       --accent-hover: #e0441d;
       --accent-active: #c73714;
-      --accent-text: #ffffff;
 
       --btn-bg: #f1f3f4;
       --btn-hover: #e8eaed;
@@ -36,24 +34,10 @@
       --totp-border: #ceead6;
       --totp-text: #137333;
       --totp-badge: #ceead6;
-
-      --input-bg: #ffffff;
-      --input-border: #dadce0;
-      --input-text: #202124;
-      --input-focus: #fb542b;
-
-      --status-success-bg: #e6f4ea;
-      --status-success-text: #137333;
-      --status-success-border: #ceead6;
-
-      --status-error-bg: #fce8e6;
-      --status-error-text: #c5221f;
-      --status-error-border: #fad2cf;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        /* Dark Theme */
         --bg: #1e1e24;
         --surface: #2b2b36;
         --border: #3e3e4f;
@@ -61,10 +45,8 @@
         --text-secondary: #9e9ea7;
         --text-muted: #737380;
 
-        --accent: #fb542b; /* orange */
         --accent-hover: #ff6e4a;
         --accent-active: #e0441d;
-        --accent-text: #ffffff;
 
         --btn-bg: #383846;
         --btn-hover: #454556;
@@ -81,19 +63,6 @@
         --totp-border: #23492b;
         --totp-text: #81c995;
         --totp-badge: #23492b;
-
-        --input-bg: #1e1e24;
-        --input-border: #3e3e4f;
-        --input-text: #f1f1f4;
-        --input-focus: #fb542b;
-
-        --status-success-bg: #172b1d;
-        --status-success-text: #81c995;
-        --status-success-border: #23492b;
-
-        --status-error-bg: #3c1f24;
-        --status-error-text: #f28b82;
-        --status-error-border: #5c2b30;
       }
     }
 
@@ -129,16 +98,20 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 8px 10px;
-      margin-bottom: 8px;
     }
     .card-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       margin-bottom: 4px;
     }
     .card-row:last-child {
       margin-bottom: 0;
+    }
+    .card-actions {
+      margin-top: 8px;
+      justify-content: flex-end;
     }
     .label {
       font-weight: 600;
@@ -151,6 +124,53 @@
       word-break: break-all;
       color: var(--text);
     }
+    .value.strong {
+      font-weight: 700;
+    }
+    .value.muted {
+      color: var(--text-muted);
+    }
+    .value.danger {
+      color: var(--danger-text);
+    }
+    .pass-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* credential card + reorder arrows */
+    .cred-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .cred-wrap .card {
+      flex: 1;
+    }
+    .arrows {
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+    .arrow {
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+      color: var(--text-muted);
+      user-select: none;
+    }
+    .arrow:hover {
+      color: var(--text);
+    }
+
+    /* TOTP */
     .totp-box {
       background: var(--totp-bg);
       border: 1px solid var(--totp-border);
@@ -181,6 +201,15 @@
       padding: 2px 5px;
       border-radius: 3px;
     }
+    .totp-secret-row {
+      margin-top: 4px;
+      font-family: monospace;
+      font-size: 11px;
+      word-break: break-all;
+      color: var(--text-secondary);
+    }
+
+    /* buttons */
     .btn {
       font-size: 11px;
       padding: 4px 8px;
@@ -205,15 +234,15 @@
     .btn-danger:hover {
       background: var(--danger-hover);
     }
-    .btn-confirm-delete {
-      background: var(--danger-text) !important;
-      color: #ffffff !important;
-      border-color: var(--danger-text) !important;
+    .btn-danger.armed {
+      background: var(--danger-text);
+      border-color: var(--danger-text);
+      color: #ffffff;
       font-weight: 700;
     }
     .btn-primary {
       background: var(--accent);
-      color: var(--accent-text);
+      color: #ffffff;
       border-color: var(--accent-hover);
       font-weight: 600;
       padding: 7px 12px;
@@ -226,6 +255,8 @@
     .btn-primary:active {
       background: var(--accent-active);
     }
+
+    /* add form */
     form {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -247,15 +278,15 @@
       width: 100%;
       padding: 6px 8px;
       font-size: 12px;
-      border: 1px solid var(--input-border);
-      background: var(--input-bg);
-      color: var(--input-text);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       border-radius: 4px;
       outline: none;
       transition: border-color 0.15s ease;
     }
     .form-group input:focus {
-      border-color: var(--input-focus);
+      border-color: var(--accent);
     }
     .input-with-action {
       display: flex;
@@ -264,6 +295,7 @@
     .input-with-action input {
       flex: 1;
     }
+
     #status-msg {
       font-size: 11px;
       font-weight: 600;
@@ -273,14 +305,14 @@
       display: none;
     }
     .status-success {
-      background: var(--status-success-bg);
-      color: var(--status-success-text);
-      border: 1px solid var(--status-success-border);
+      background: var(--totp-bg);
+      color: var(--totp-text);
+      border: 1px solid var(--totp-border);
     }
     .status-error {
-      background: var(--status-error-bg);
-      color: var(--status-error-text);
-      border: 1px solid var(--status-error-border);
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
     }
     .empty-state {
       font-style: italic;
@@ -288,15 +320,17 @@
       font-size: 12px;
       padding: 6px 0;
     }
+
+    /* backup */
     #export-area {
       width: 100%;
       min-height: 90px;
       padding: 6px 8px;
       font-family: monospace;
       font-size: 11px;
-      border: 1px solid var(--input-border);
-      background: var(--input-bg);
-      color: var(--input-text);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       border-radius: 4px;
       outline: none;
       resize: vertical;
@@ -306,7 +340,7 @@
       display: none;
     }
     #export-area:focus {
-      border-color: var(--input-focus);
+      border-color: var(--accent);
     }
     .backup-actions {
       display: flex;
@@ -319,14 +353,11 @@
       text-align: right;
       margin-top: 6px;
     }
-    #import-go-btn {
-      all: revert;
-    }
   </style>
 </head>
 <body>
   <!-- ADD CREDENTIAL FORM -->
-  <section id="add-section">
+  <section>
     <h2>Add Credential</h2>
     <form id="add-form">
       <div class="form-group">
@@ -355,7 +386,7 @@
   </section>
 
   <!-- SAVED LOGINS -->
-  <section id="saved-section">
+  <section>
     <h2 id="saved-title">Saved Passwords</h2>
     <div id="credentials-list">
       <div class="empty-state">Loading...</div>
@@ -363,14 +394,14 @@
   </section>
 
   <!-- BACKUP (EXPORT / IMPORT) -->
-  <section id="backup-section">
+  <section>
     <div class="backup-actions">
       <button type="button" class="btn" id="export-btn">Export</button>
       <button type="button" class="btn" id="import-btn">Import</button>
     </div>
     <textarea id="export-area" hidden></textarea>
     <div id="import-go-row" hidden>
-      <button type="button" id="import-go-btn">Import</button>
+      <button type="button" class="btn" id="import-go-btn">Import</button>
     </div>
   </section>
 

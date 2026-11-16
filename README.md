@@ -18,7 +18,7 @@ Minimal zero-click password and TOTP autofill extension for Chromium based brows
   - Isolated content script execution; no `externally_connectable` or `web_accessible_resources`
   - Top-level frame restriction protects against invisible iframe clickjacking
 - **Minimal GUI** for adding, viewing, copying, and deleting credentials
-- **<100KiB** ignoring tests/extension metadata
+- **<50KiB** excluding tests/metadata
 
 ## Installation
 1. Open your browser and navigate to `chrome://extensions/`

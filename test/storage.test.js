@@ -406,6 +406,12 @@ test('firstOnly returns just the freshest usable match', async () => {
   fakeLocal.set('_bp_vault', raw);
 
   const afterCorrupt = await getCredentials('example.com', { firstOnly: true });
-  assert.equal(afterCorrupt.some(item => item.decryptError), true);
-  assert.equal(afterCorrupt.find(item => !item.decryptError).username, 'old');
+  assert.equal(afterCorrupt.length, 1);
+  assert.equal(afterCorrupt[0].decryptError, false);
+  assert.equal(afterCorrupt[0].username, 'old');
+
+  // A fully corrupt vault yields nothing usable rather than throwing.
+  raw[0].passwordEnc = raw[0].passwordEnc.slice(0, -2) + 'AA';
+  fakeLocal.set('_bp_vault', raw);
+  assert.deepEqual(await getCredentials('example.com', { firstOnly: true }), []);
 });
